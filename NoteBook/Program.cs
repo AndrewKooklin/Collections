@@ -11,17 +11,17 @@ namespace NoteBook
     {
         public class Person
         {
-            public string fullName { get; set; }
+            public string FullName { get; set; }
 
-            public string streetName { get; set; }
+            public string StreetName { get; set; }
 
-            public int houseNumber { get; set; }
+            public int HouseNumber { get; set; }
 
-            public int flatNumber { get; set; }
+            public int FlatNumber { get; set; }
 
-            public long mobilePhoneNumber { get; set; }
+            public long MobilePhoneNumber { get; set; }
 
-            public long flatPhoneNumber { get; set; }
+            public long FlatPhoneNumber { get; set; }
         }
 
         static List<Person> InputData()
@@ -50,7 +50,7 @@ namespace NoteBook
                     }
                     else
                     {
-                        newPerson.fullName = tempFullName;
+                        newPerson.FullName = tempFullName;
 
                         break;
                     }
@@ -70,7 +70,7 @@ namespace NoteBook
                     }
                     else
                     {
-                        newPerson.streetName = tempStreetName;
+                        newPerson.StreetName = tempStreetName;
 
                         break;
                     }
@@ -84,7 +84,7 @@ namespace NoteBook
 
                     if (Int32.TryParse(tempNumberHouse, out int tempNumHouse))
                     {
-                        newPerson.houseNumber = tempNumHouse;
+                        newPerson.HouseNumber = tempNumHouse;
 
                         break;
                     }
@@ -104,7 +104,7 @@ namespace NoteBook
 
                     if (Int32.TryParse(tempNumberFlat, out int tempNumFlat))
                     {
-                        newPerson.flatNumber = tempNumFlat;
+                        newPerson.FlatNumber = tempNumFlat;
 
                         break;
                     }
@@ -124,7 +124,7 @@ namespace NoteBook
 
                     if (long.TryParse(tempMobileNumber, out long tempMobNumber) && (tempMobNumber > 9999 && tempMobNumber < 100000000000))
                     {
-                        newPerson.mobilePhoneNumber = tempMobNumber;
+                        newPerson.MobilePhoneNumber = tempMobNumber;
 
                         break;
                     }
@@ -144,7 +144,7 @@ namespace NoteBook
 
                     if (long.TryParse(tempFlatPhoneNumber, out long tempFlatPhoneNumb) && (tempFlatPhoneNumb > 9999 && tempFlatPhoneNumb < 10000000))
                     {
-                        newPerson.flatPhoneNumber = tempFlatPhoneNumb;
+                        newPerson.FlatPhoneNumber = tempFlatPhoneNumb;
 
                         break;
                     }
@@ -205,23 +205,23 @@ namespace NoteBook
                 {
                     XElement person = new XElement("Person");
 
-                    XAttribute personAttribute = new XAttribute("name", listPerson[i].fullName);
+                    XAttribute personAttribute = new XAttribute("name", listPerson[i].FullName);
 
                     person.Add(personAttribute);
 
-                    XElement street = new XElement("Street", listPerson[i].streetName);
+                    XElement street = new XElement("Street", listPerson[i].StreetName);
 
-                    XElement houseNumber = new XElement("HouseNumber", listPerson[i].houseNumber);
+                    XElement houseNumber = new XElement("HouseNumber", listPerson[i].HouseNumber);
 
-                    XElement flatNumber = new XElement("HouseFlat", listPerson[i].flatNumber);
+                    XElement flatNumber = new XElement("HouseFlat", listPerson[i].FlatNumber);
 
                     XElement address = new XElement("Address");
 
                     address.Add(street, houseNumber, flatNumber);
 
-                    XElement mobilePhone = new XElement("MobilePhone", listPerson[i].mobilePhoneNumber);
+                    XElement mobilePhone = new XElement("MobilePhone", listPerson[i].MobilePhoneNumber);
 
-                    XElement flatPhone = new XElement("FlatPhone", listPerson[i].flatPhoneNumber);
+                    XElement flatPhone = new XElement("FlatPhone", listPerson[i].FlatPhoneNumber);
 
                     XElement phones = new XElement("Phones");
 
