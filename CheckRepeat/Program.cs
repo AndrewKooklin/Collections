@@ -12,10 +12,12 @@ namespace CheckRepeat
             Console.WriteLine("\n Вводите каждое число с новой строки" +
                     "\n или пустую строку для выходв из программы");
 
-            HashSet<int> set = new HashSet<int>();
+            HashSet<int> uniqNumbers = new HashSet<int>();
 
             do
             {
+                Console.WriteLine("\n Введите число :");
+
                 string input = Console.ReadLine();
 
                 if (String.IsNullOrEmpty(input))
@@ -26,15 +28,15 @@ namespace CheckRepeat
                 }               
                 else if(Int32.TryParse(input, out int number))
                 {
-                    if (!set.Contains(number))
+                    if (!uniqNumbers.Add(number))
                     {
-                        set.Add(number);
+                        Console.WriteLine($"\n Число {number} уже есть в коллекции");
 
-                        Console.WriteLine($"\n Число {number} добавлено в коллекцию");
+                        continue;
                     }
                     else
                     {
-                        Console.WriteLine($"\n Число {number} уже есть в коллекции");
+                        Console.WriteLine($"\n Число {number} добавлено в коллекцию");
 
                         continue;
                     }

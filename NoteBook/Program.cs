@@ -1,32 +1,48 @@
 ﻿using System;
 using System.IO;
-using System.Xml.Serialization;
+//using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace NoteBook
 {
     class Program
     {
-        static void InputData(string path)
+        public class Person
+        {
+            public string fullName { get; set; }
+
+            public string streetName { get; set; }
+
+            public int houseNumber { get; set; }
+
+            public int flatNumber { get; set; }
+
+            public long mobilePhoneNumber { get; set; }
+
+            public long flatPhoneNumber { get; set; }
+        }
+
+        static List<Person> InputData()
         {
             Console.WriteLine("\n Введите данные о контакте");
 
-            XElement persons;
+            List<Person> listPerson = new List<Person>();
 
-            XElement person;
+            Person newPerson;
 
             do
             {
-                person = new XElement("Person");
+                newPerson = new Person();
 
                 while (true)
                 {
                     Console.WriteLine("\n Введите Ф.И.О.");
 
-                    string fullName = Console.ReadLine();
+                    string tempFullName = Console.ReadLine();
 
-                    if (String.IsNullOrEmpty(fullName) || String.IsNullOrWhiteSpace(fullName))
+                    if (String.IsNullOrEmpty(tempFullName) || String.IsNullOrWhiteSpace(tempFullName))
                     {
                         Console.WriteLine("\n Поле \"Ф.И.О.\" не может быть пустой строкой");
 
@@ -34,23 +50,19 @@ namespace NoteBook
                     }
                     else
                     {
-                        XAttribute personAttribute = new XAttribute("name", fullName);
-
-                        person.Add(personAttribute);
+                        newPerson.fullName = tempFullName;
 
                         break;
                     }
                 }
 
-                XElement street;
-
                 while (true)
                 {
                     Console.WriteLine("\n Введите название улицы");
 
-                    string streetName = Console.ReadLine();
+                    string tempStreetName = Console.ReadLine();
 
-                    if (String.IsNullOrEmpty(streetName) || String.IsNullOrWhiteSpace(streetName))
+                    if (String.IsNullOrEmpty(tempStreetName) || String.IsNullOrWhiteSpace(tempStreetName))
                     {
                         Console.WriteLine("\n Поле \"Название улицы\" не может быть пустой строкой");
 
@@ -58,23 +70,21 @@ namespace NoteBook
                     }
                     else
                     {
-                        street = new XElement("Street", streetName);
+                        newPerson.streetName = tempStreetName;
 
                         break;
                     }
                 }
-
-                XElement houseNumber;
 
                 while (true)
                 {
                     Console.WriteLine("\n Введите номер дома");
 
-                    string numberHouse = Console.ReadLine();
+                    string tempNumberHouse = Console.ReadLine();
 
-                    if (Int32.TryParse(numberHouse, out int numHouse))
+                    if (Int32.TryParse(tempNumberHouse, out int tempNumHouse))
                     {
-                        houseNumber = new XElement("HouseNumber", numberHouse);
+                        newPerson.houseNumber = tempNumHouse;
 
                         break;
                     }
@@ -85,18 +95,16 @@ namespace NoteBook
                         continue;
                     }
                 }
-
-                XElement flatNumber;
 
                 while (true)
                 {
                     Console.WriteLine("\n Введите номер квартиры");
 
-                    string numberFlat = Console.ReadLine();
+                    string tempNumberFlat = Console.ReadLine();
 
-                    if (Int32.TryParse(numberFlat, out int numFlat))
+                    if (Int32.TryParse(tempNumberFlat, out int tempNumFlat))
                     {
-                        flatNumber = new XElement("HouseFlat", numberFlat);
+                        newPerson.flatNumber = tempNumFlat;
 
                         break;
                     }
@@ -108,21 +116,15 @@ namespace NoteBook
                     }
                 }
 
-                XElement address = new XElement("Address");
-
-                address.Add(street, houseNumber, flatNumber);
-
-                XElement mobilePhone;
-
                 while (true)
                 {
                     Console.WriteLine("\n Введите номер мобильного телефона(от 5 до 11 цифр)");
 
-                    string mobileNumber = Console.ReadLine();
+                    string tempMobileNumber = Console.ReadLine();
 
-                    if (long.TryParse(mobileNumber, out long numberPhone) && (numberPhone > 9999 && numberPhone < 100000000000))
+                    if (long.TryParse(tempMobileNumber, out long tempMobNumber) && (tempMobNumber > 9999 && tempMobNumber < 100000000000))
                     {
-                        mobilePhone = new XElement("MobilePhone", mobileNumber);
+                        newPerson.mobilePhoneNumber = tempMobNumber;
 
                         break;
                     }
@@ -133,18 +135,16 @@ namespace NoteBook
                         continue;
                     }
                 }
-
-                XElement flatPhone;
 
                 while (true)
                 {
                     Console.WriteLine("\n Введите номер домашнего телефона(от 5 до 7 цифр)");
 
-                    string flatPhoneNumber = Console.ReadLine();
+                    string tempFlatPhoneNumber = Console.ReadLine();
 
-                    if (long.TryParse(flatPhoneNumber, out long numberPhone) && (numberPhone > 9999 && numberPhone < 10000000))
+                    if (long.TryParse(tempFlatPhoneNumber, out long tempFlatPhoneNumb) && (tempFlatPhoneNumb > 9999 && tempFlatPhoneNumb < 10000000))
                     {
-                        flatPhone = new XElement("FlatPhone", flatPhoneNumber);
+                        newPerson.flatPhoneNumber = tempFlatPhoneNumb;
 
                         break;
                     }
@@ -155,11 +155,8 @@ namespace NoteBook
                         continue;
                     }
                 }
-                XElement phones = new XElement("Phones");
 
-                phones.Add(mobilePhone, flatPhone);
-
-                person.Add(address, phones);
+                listPerson.Add(newPerson);
 
                 Console.WriteLine("\n Продолжить ввод данных? : y/n");
 
@@ -176,28 +173,69 @@ namespace NoteBook
             }
             while (true);
 
-            if (File.Exists(path))
+            return listPerson;
+        }
+
+        static void SaveToXmlFile(List<Person> listPerson, string path)
+        {
+            XElement persons;
+
+            if (listPerson.Count <= 0)
             {
-                XDocument xDoc = XDocument.Load(path);
+                Console.WriteLine("\n Контакты не заполнены");
 
-                XElement child = xDoc.Descendants("Person").First();
-
-                persons = child.Parent;               
-
-                persons.Add(person);
-
-                persons.Save(path);
+                InputData();
             }
             else
             {
-                persons = new XElement("Persons");
+                if (File.Exists(path))
+                {
+                    XDocument xDoc = XDocument.Load(path);
 
-                persons.Add(person);
+                    XElement child = xDoc.Descendants("Person").First();
+
+                    persons = child.Parent;
+                }
+                else
+                {
+                    persons = new XElement("Persons");
+                }
+
+                for (int i = 0; i < listPerson.Count; i++)
+                {
+                    XElement person = new XElement("Person");
+
+                    XAttribute personAttribute = new XAttribute("name", listPerson[i].fullName);
+
+                    person.Add(personAttribute);
+
+                    XElement street = new XElement("Street", listPerson[i].streetName);
+
+                    XElement houseNumber = new XElement("HouseNumber", listPerson[i].houseNumber);
+
+                    XElement flatNumber = new XElement("HouseFlat", listPerson[i].flatNumber);
+
+                    XElement address = new XElement("Address");
+
+                    address.Add(street, houseNumber, flatNumber);
+
+                    XElement mobilePhone = new XElement("MobilePhone", listPerson[i].mobilePhoneNumber);
+
+                    XElement flatPhone = new XElement("FlatPhone", listPerson[i].flatPhoneNumber);
+
+                    XElement phones = new XElement("Phones");
+
+                    phones.Add(mobilePhone, flatPhone);
+
+                    person.Add(address, phones);
+
+                    persons.Add(person);
+                }
 
                 persons.Save(path);
             }
 
-            Console.WriteLine("\n Записи сохранены в файл");
+           Console.WriteLine("\n Записи сохранены в файл");
         }
 
         //static void SerializePersons(XElement xElement, string path)
@@ -230,7 +268,7 @@ namespace NoteBook
 
             string path = @"Persons.xml";
 
-            InputData(path);
+            SaveToXmlFile(InputData(), path);
 
             Console.ReadLine();
         }

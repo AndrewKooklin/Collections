@@ -121,23 +121,10 @@ namespace PhoneBook
 
                     if (long.TryParse(telephone, out long numberPhone) && (numberPhone > 9999 && numberPhone < 100000000000))
                     {
-                        if(phoneBook.TryGetValue(telephone, out string number))
+                        if(phoneBook.TryGetValue(telephone, out string name))
                         {
-                            Console.WriteLine($" Владелец телефона - {number}");
+                            Console.WriteLine($" Владелец телефона - {name}");
                         }
-
-                        //foreach (var number in phoneBook.Keys)
-                        //{
-                        //    if (number == telephone)
-                        //    {
-                        //        Console.WriteLine($"Владелец телефона - {phoneBook[telephone]}");
-                        //        break;
-                        //    }
-                        //    else
-                        //    {
-                        //        continue;
-                        //    }
-                        //}
                     }
                     else
                     {
